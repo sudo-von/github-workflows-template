@@ -22,8 +22,8 @@ jobs:
           message: Please assign a versioning label to the pull request, using either 'major', 'minor', or 'patch'.
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-  setup_environment:
-    name: "Configure node.js environment"
+  quality_assurance_check:
+    name: "Quality assurance check"
     if: contains(fromJson('["opened", "synchronize"]'), github.event.action)
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +32,7 @@ jobs:
       - name: Configure environment
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "20.13.1"
           cache: "npm"
           cache-dependency-path: "examples/node-js/design-system"
       - name: Install dependencies
