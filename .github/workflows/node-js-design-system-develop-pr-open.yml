@@ -17,44 +17,30 @@ jobs:
       pull-requests: write
     steps:
       - name: Add comment
-      - uses: mshick/add-pr-comment@v1
+        uses: mshick/add-pr-comment@v1
         with:
           message: Please assign a versioning label to the pull request, using either 'major', 'minor', or 'patch'.
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-  setup_environment:
-    name: "Configure node.js environment"
-    needs: request_versioning_label
-    if: github.event.action in ['opened', 'synchronize']
+  quality_assurance_check:
+    name: "Quality assurance check"
+    if: contains(fromJson('["opened", "synchronize"]'), github.event.action)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Configure environment
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "20.13.1"
           cache: "npm"
+          cache-dependency-path: "examples/node-js/design-system"
       - name: Install dependencies
         run: npm install
         working-directory: examples/node-js/design-system
-
-  run_unit_tests:
-    name: "Run unit tests"
-    needs: setup_environment
-    if: github.event.action in ['opened', 'synchronize']
-    runs-on: ubuntu-latest
-    steps:
       - name: Execute unit tests
         run: npm run unit:tests
         working-directory: examples/node-js/design-system
-
-  run_integration_tests:
-    name: "Run integration tests"
-    needs: run_unit_tests
-    if: github.event.action in ['opened', 'synchronize']
-    runs-on: ubuntu-latest
-    steps:
       - name: Execute integration tests
         run: npm run integration:tests
         working-directory: examples/node-js/design-system
