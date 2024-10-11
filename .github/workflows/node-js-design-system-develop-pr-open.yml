@@ -37,7 +37,10 @@ jobs:
           cache-dependency-path: "examples/node-js/design-system"
       - name: Install dependencies
         run: npm install
+        working-directory: examples/node-js/design-system
       - name: Execute unit tests
         run: npm run unit:tests
+        working-directory: examples/node-js/design-system
       - name: Execute integration tests
         run: npm run integration:tests
+        working-directory: examples/node-js/design-system
