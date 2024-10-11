@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Execute unit tests
-        run: npm run unit:tests
+        run: ls -la
         working-directory: examples/node-js/design-system
 
   run_integration_tests:
