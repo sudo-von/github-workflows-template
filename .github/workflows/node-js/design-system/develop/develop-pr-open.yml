@@ -1,0 +1,57 @@
+name: "[develop] PR open"
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  request_versioning_label:
+    name: "Request versioning label"
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Add comment
+      - uses: mshick/add-pr-comment@v1
+        with:
+          message: Please assign a versioning label to the pull request, using either 'major', 'minor', or 'patch'.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+  setup_environment:
+    name: "Configure node.js environment"
+    needs: request_versioning_label
+    if: github.event.action in ['opened', 'synchronize']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Configure environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm install
+
+  run_unit_tests:
+    name: "Run unit tests"
+    needs: setup_environment
+    if: github.event.action in ['opened', 'synchronize']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute unit tests
+        run: npm run unit:tests
+
+  run_integration_tests:
+    name: "Run integration tests"
+    needs: run_unit_tests
+    if: github.event.action in ['opened', 'synchronize']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute integration tests
+        run: npm run integration:tests
