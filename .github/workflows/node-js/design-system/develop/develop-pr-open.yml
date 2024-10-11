@@ -37,6 +37,7 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm install
+        working-directory: examples/node-js/design-system
 
   run_unit_tests:
     name: "Run unit tests"
@@ -46,6 +47,7 @@ jobs:
     steps:
       - name: Execute unit tests
         run: npm run unit:tests
+        working-directory: examples/node-js/design-system
 
   run_integration_tests:
     name: "Run integration tests"
@@ -55,3 +57,4 @@ jobs:
     steps:
       - name: Execute integration tests
         run: npm run integration:tests
+        working-directory: examples/node-js/design-system
