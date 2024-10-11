@@ -37,37 +37,7 @@ jobs:
           cache-dependency-path: "examples/node-js/design-system"
       - name: Install dependencies
         run: npm install
-        working-directory: examples/node-js/design-system
-      - name: Upload dependencies
-        uses: actions/upload-artifact@v3
-        with:
-          name: node-modules
-          path: examples/node-js/design-system/node_modules
-
-  run_unit_tests:
-    name: "Run unit tests"
-    needs: setup_environment
-    if: contains(fromJson('["opened", "synchronize"]'), github.event.action)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Node.js dependencies
-        uses: actions/download-artifact@v3
-        with:
-          name: node-modules
       - name: Execute unit tests
-        run: ls -la
-      - name: Execute unit tests 2
-        run: pwd
-
-  run_integration_tests:
-    name: "Run integration tests"
-    needs: run_unit_tests
-    if: contains(fromJson('["opened", "synchronize"]'), github.event.action)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Node.js dependencies
-        uses: actions/download-artifact@v3
-        with:
-          name: node-modules
+        run: npm run unit:tests
       - name: Execute integration tests
         run: npm run integration:tests
