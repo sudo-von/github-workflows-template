@@ -24,7 +24,6 @@ jobs:
 
   setup_environment:
     name: "Configure node.js environment"
-    needs: request_versioning_label
     if: contains(fromJson('["opened", "synchronize"]'), github.event.action)
     runs-on: ubuntu-latest
     steps:
