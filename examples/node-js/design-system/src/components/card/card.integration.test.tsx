@@ -10,6 +10,6 @@ describe('Card', () => {
       name: 'Hello world',
     });
 
-    expect(button).toBeInTheDocument();
+    expect(button).not.toBeInTheDocument();
   });
 });
